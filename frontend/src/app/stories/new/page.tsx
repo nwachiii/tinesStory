@@ -54,7 +54,7 @@ export default function CreateStoryPage() {
           mx="auto"
         >
           <HStack spacing={3} mb={3} pl={4}>
-            <Heading size="lg" color="#222222">
+            <Heading size="lg" color={useColorModeValue('gray.800', 'white')}>
               Create New Story
             </Heading>
           </HStack>
