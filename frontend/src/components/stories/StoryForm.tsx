@@ -251,7 +251,7 @@ export function StoryForm({ story, onSubmit, onCancel, isLoading = false }: Stor
     <Box
       as="form"
       onSubmit={handleSubmit}
-      p={6}
+      p={{ base: 4, md: 6 }}
     >
       <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={6}>
         <GridItem colSpan={{ base: 1, md: 2 }}>
@@ -335,16 +335,16 @@ export function StoryForm({ story, onSubmit, onCancel, isLoading = false }: Stor
               }
             >
               <Stack direction={{ base: 'column', sm: 'row' }} spacing={4}>
-                <Radio value="draft" size="sm">Draft</Radio>
-                <Radio value="published" size="sm">Published</Radio>
+                <Radio value="draft" size="sm" w={{ base: 'full', sm: 'auto' }}>Draft</Radio>
+                <Radio value="published" size="sm" w={{ base: 'full', sm: 'auto' }}>Published</Radio>
               </Stack>
             </RadioGroup>
           </FormControl>
         </GridItem>
 
         <GridItem colSpan={{ base: 1, md: 2 }}>
-          <HStack spacing={4} justify="flex-end" mt={6}>
-            <Button onClick={onCancel} isDisabled={isLoading} leftIcon={<FiX />} size="md" variant={'outline'} colorScheme='red'>
+          <HStack spacing={4} justify={{ base: 'center', md: 'flex-end' }} mt={6} flexDirection={{ base: 'column', md: 'row' }}>
+            <Button onClick={onCancel} isDisabled={isLoading} leftIcon={<FiX />} size="md" variant={'outline'} colorScheme='red' w={{ base: 'full', md: 'auto' }}>
               Cancel
             </Button>
             <Button
@@ -353,6 +353,7 @@ export function StoryForm({ story, onSubmit, onCancel, isLoading = false }: Stor
               isLoading={isLoading}
               leftIcon={<FiCheckCircle />}
               size="md"
+              w={{ base: 'full', md: 'auto' }}
             >
               {story ? 'Update Story' : 'Create Story'}
             </Button>

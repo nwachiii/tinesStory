@@ -50,10 +50,10 @@ export default function CreateStoryPage() {
           bg={useColorModeValue('white', 'gray.800')}
           shadow="lg"
           borderRadius="xl"
-          p={8}
+          p={{base: 2, md: 8}}
           mx="auto"
         >
-          <HStack spacing={3} mb={3} pl={4}>
+          <HStack spacing={3} my={3} pl={4}>
             <Heading size="lg" color={useColorModeValue('gray.800', 'white')}>
               Create New Story
             </Heading>
