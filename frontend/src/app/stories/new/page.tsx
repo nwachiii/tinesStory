@@ -47,7 +47,7 @@ export default function CreateStoryPage() {
           { label: 'Create Story' },
         ]}
       />
-      <Container maxW="container.xl" py={8}>
+      <Container maxW="container.lg" py={8}>
         <HStack spacing={2} mb={6}>
           <Icon as={FiPlus} boxSize={6} />
           <Heading size="lg">

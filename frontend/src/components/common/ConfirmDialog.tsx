@@ -8,6 +8,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Button,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { useRef } from 'react';
 
@@ -33,6 +34,7 @@ export function ConfirmDialog({
   confirmColorScheme = 'red',
 }: ConfirmDialogProps) {
   const cancelRef = useRef<HTMLButtonElement>(null);
+  const bg = useColorModeValue('white', 'gray.800');
 
   return (
     <AlertDialog
@@ -41,7 +43,7 @@ export function ConfirmDialog({
       onClose={onClose}
     >
       <AlertDialogOverlay>
-        <AlertDialogContent>
+        <AlertDialogContent bg={bg}>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
             {title}
           </AlertDialogHeader>

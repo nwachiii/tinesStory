@@ -1,6 +1,6 @@
-# TinesStories Blog Platform
+# TinesStories User Demo
 
-A full-featured blog platform for publishing and managing company stories.
+A full-featured blog platform for publishing and managing company stories/articles.
 
 ## Tech Stack
 

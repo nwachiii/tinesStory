@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Box, useToast } from '@chakra-ui/react';
 import { Navbar } from '@/components/layout/Navbar';
 import { StoryDetail } from '@/components/stories/StoryDetail';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { StoryDetailSkeleton } from '@/components/common/skeletons';
 import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import { apiClient } from '@/lib/api';
 import { Story } from '@/types/story';
@@ -82,7 +82,7 @@ export default function StoryDetailPage() {
     return (
       <Box minH="100vh">
         <Navbar />
-        <LoadingSpinner />
+        <StoryDetailSkeleton />
       </Box>
     );
   }

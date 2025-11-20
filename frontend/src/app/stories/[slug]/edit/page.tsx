@@ -127,7 +127,7 @@ export default function EditStoryPage() {
           { label: 'Edit Story' },
         ]}
       />
-      <Container maxW="container.xl" py={8}>
+      <Container maxW="container.lg" py={8}>
         <HStack justify="space-between" mb={6}>
           <HStack spacing={2}>
             <Icon as={FiEdit} boxSize={6} />

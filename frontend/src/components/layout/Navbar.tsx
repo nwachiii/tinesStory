@@ -11,6 +11,7 @@ import {
   IconButton,
   HStack,
   Icon,
+  useColorMode,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { 
@@ -21,15 +22,28 @@ import {
   FiSun,
   FiBookOpen 
 } from 'react-icons/fi';
-import { useColorMode } from '@chakra-ui/react';
 
 export function Navbar() {
-  const bg = useColorModeValue('white', 'gray.800');
+  const bg = useColorModeValue('rgba(255, 255, 255, 0.95)', 'rgba(26, 32, 44, 0.95)');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Box as="nav" bg={bg} borderBottom="1px" borderColor={borderColor} py={4}>
+    <Box
+      as="nav"
+      position="sticky"
+      top={0}
+      left={0}
+      right={0}
+      zIndex={1000}
+      bg={bg}
+      borderBottom="1px"
+      borderColor={borderColor}
+      py={4}
+      backdropFilter="blur(10px)"
+      boxShadow="sm"
+      width="100%"
+    >
       <Container maxW="container.xl">
         <Flex justify="space-between" align="center">
           <NextLink href="/" passHref legacyBehavior>
@@ -66,7 +80,7 @@ export function Navbar() {
               </Button>
             </NextLink>
             <IconButton
-              aria-label="Toggle color mode"
+              aria-label={colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
               icon={colorMode === 'dark' ? <FiSun /> : <FiMoon />}
               onClick={toggleColorMode}
               variant="ghost"

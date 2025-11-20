@@ -11,6 +11,7 @@ import {
   Flex,
   Icon,
   HStack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { FiUser, FiCalendar } from 'react-icons/fi';
 import NextLink from 'next/link';
@@ -24,9 +25,16 @@ interface StoryCardProps {
 }
 
 export function StoryCard({ story, showStatus = false }: StoryCardProps) {
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const imageBg = useColorModeValue('gray.200', 'gray.700');
+  const textColor = useColorModeValue('gray.600', 'gray.300');
+  const iconColor = useColorModeValue('gray.500', 'gray.400');
+  const dateColor = useColorModeValue('gray.400', 'gray.500');
+
   return (
     <NextLink href={`/stories/${story.slug}`} style={{ textDecoration: 'none' }}>
       <Card
+        bg={cardBg}
         _hover={{ transform: 'translateY(-4px)', shadow: 'lg' }}
         transition="all 0.2s"
         height="100%"
@@ -39,7 +47,7 @@ export function StoryCard({ story, showStatus = false }: StoryCardProps) {
         width="100%"
         height="200px"
         overflow="hidden"
-        bg="gray.200"
+        bg={imageBg}
       >
         <Image
           src={story.featuredImage}
@@ -51,7 +59,7 @@ export function StoryCard({ story, showStatus = false }: StoryCardProps) {
         />
         {showStatus && (
           <Box position="absolute" top={2} right={2}>
-            <StatusBadge status={story.status} />
+            <StatusBadge status={story.status} isCard={true} />
           </Box>
         )}
       </Box>
@@ -60,7 +68,7 @@ export function StoryCard({ story, showStatus = false }: StoryCardProps) {
         <Heading size="md" mb={2} noOfLines={2}>
           {story.title}
         </Heading>
-        <Text color="gray.600" noOfLines={3} flex="1">
+        <Text color={textColor} noOfLines={3} flex="1">
           {story.excerpt}
         </Text>
       </CardBody>
@@ -69,14 +77,14 @@ export function StoryCard({ story, showStatus = false }: StoryCardProps) {
         <Flex justify="space-between" align="center" width="100%">
           <Box>
             <HStack spacing={1} mb={1}>
-              <Icon as={FiUser} fontSize="sm" color="gray.500" />
-              <Text fontSize="sm" color="gray.500">
+              <Icon as={FiUser} fontSize="sm" color={iconColor} />
+              <Text fontSize="sm" color={iconColor}>
                 {story.authorName}
               </Text>
             </HStack>
             <HStack spacing={1}>
-              <Icon as={FiCalendar} fontSize="xs" color="gray.400" />
-              <Text fontSize="xs" color="gray.400">
+              <Icon as={FiCalendar} fontSize="xs" color={dateColor} />
+              <Text fontSize="xs" color={dateColor}>
                 {story.status === 'published' && story.publishedAt
                   ? formatDate(story.publishedAt)
                   : formatDate(story.createdAt)}

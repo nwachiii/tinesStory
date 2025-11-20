@@ -21,6 +21,13 @@ export const theme = extendTheme({
         colorScheme: 'blue',
       },
     },
+    Card: {
+      baseStyle: (props: any) => ({
+        container: {
+          bg: props.colorMode === 'dark' ? 'gray.800' : 'white',
+        },
+      }),
+    },
   },
 });
 

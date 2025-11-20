@@ -14,7 +14,7 @@ import { FiBookOpen, FiFileText } from 'react-icons/fi';
 import { Navbar } from '@/components/layout/Navbar';
 import { StoryList } from '@/components/stories/StoryList';
 import { Pagination } from '@/components/common/Pagination';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { StoryListSkeleton } from '@/components/common/skeletons';
 import { apiClient } from '@/lib/api';
 import { Story } from '@/types/story';
 import { STORIES_PER_PAGE } from '@/constants/config';
@@ -71,7 +71,7 @@ export default function HomePage() {
           </HStack>
           <Checkbox
             isChecked={showDrafts}
-            onChange={(e) => setShowDrafts(e.target.checked)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowDrafts(e.target.checked)}
           >
             <HStack spacing={1}>
               <Icon as={FiFileText} />
@@ -81,7 +81,7 @@ export default function HomePage() {
         </HStack>
 
         {loading ? (
-          <LoadingSpinner />
+          <StoryListSkeleton />
         ) : (
           <>
             <StoryList stories={stories} showStatus={showDrafts} />
