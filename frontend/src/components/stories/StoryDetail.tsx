@@ -11,6 +11,7 @@ import {
   HStack,
   Divider,
   Icon,
+  Stack,
 } from '@chakra-ui/react';
 import { FiUser, FiCalendar, FiEdit, FiTrash2, FiArrowLeft } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
@@ -70,15 +71,16 @@ export function StoryDetail({
 
         <Box
           className="markdown-content"
-          fontSize="lg"
-          lineHeight="1.8"
+          fontSize={{base: 'sm', md: "lg"}}
+          lineHeight={{ base: "1.6", md: "1.8" }}
+          px={2}
           mb={8}
         >
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{story.content}</ReactMarkdown>
         </Box>
 
         {showActions && (
-          <HStack spacing={4} mt={8}>
+          <Stack direction={{base: 'column', md: 'row'}} spacing={4} mt={8}>
             {onEdit && (
               <Button colorScheme="blue" onClick={onEdit} leftIcon={<FiEdit />}>
                 Edit Story
@@ -94,7 +96,7 @@ export function StoryDetail({
                 Back to Home
               </Button>
             </NextLink>
-          </HStack>
+          </Stack>
         )}
       </Box>
     </Container>
