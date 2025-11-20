@@ -1,24 +1,22 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Container, Heading, useToast, HStack, Icon } from '@chakra-ui/react';
+import { Box, Container, Heading, useToast, HStack, Icon, useColorModeValue } from '@chakra-ui/react';
 import { FiPlus } from 'react-icons/fi';
 import { Navbar } from '@/components/layout/Navbar';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { StoryForm } from '@/components/stories/StoryForm';
-import { apiClient } from '@/lib/api';
-import { CreateStoryDto } from '@/types/story';
+import { useCreateStory } from '@/lib/api';
+import { CreateStoryDto, UpdateStoryDto } from '@/types/story';
 
 export default function CreateStoryPage() {
   const router = useRouter();
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const createStoryMutation = useCreateStory();
 
-  const handleSubmit = async (data: CreateStoryDto) => {
+  const handleSubmit = async (data: CreateStoryDto | UpdateStoryDto) => {
     try {
-      setIsLoading(true);
-      const response = await apiClient.createStory(data);
+      const response = await createStoryMutation.mutateAsync(data as CreateStoryDto);
       toast({
         title: 'Success',
         description: 'Story created successfully',
@@ -29,8 +27,6 @@ export default function CreateStoryPage() {
       router.push(`/stories/${response.story.slug}`);
     } catch (error) {
       throw error; // Let StoryForm handle the error display
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -38,8 +34,10 @@ export default function CreateStoryPage() {
     router.push('/');
   };
 
+  const bgColor = useColorModeValue('gray.50', 'gray.900');
+
   return (
-    <Box minH="100vh">
+    <Box minH="100vh" bg={bgColor}>
       <Navbar />
       <Breadcrumbs
         items={[
@@ -47,14 +45,21 @@ export default function CreateStoryPage() {
           { label: 'Create Story' },
         ]}
       />
-      <Container maxW="container.lg" py={8}>
-        <HStack spacing={2} mb={6}>
-          <Icon as={FiPlus} boxSize={6} />
-          <Heading size="lg">
-            Create New Story
-          </Heading>
-        </HStack>
-        <StoryForm onSubmit={handleSubmit} onCancel={handleCancel} isLoading={isLoading} />
+      <Container maxW="container.md" py={8}>
+        <Box
+          bg={useColorModeValue('white', 'gray.800')}
+          shadow="lg"
+          borderRadius="xl"
+          p={8}
+          mx="auto"
+        >
+          <HStack spacing={3} mb={3} pl={4}>
+            <Heading size="lg" color="#222222">
+              Create New Story
+            </Heading>
+          </HStack>
+          <StoryForm onSubmit={handleSubmit} onCancel={handleCancel} isLoading={createStoryMutation.isPending} />
+        </Box>
       </Container>
     </Box>
   );

@@ -1,3 +1,4 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { API_URL } from '@/constants/config';
 import { StoriesResponse, StoryResponse, CreateStoryDto, UpdateStoryDto } from '@/types/story';
 
@@ -85,4 +86,64 @@ class ApiClient {
 }
 
 export const apiClient = new ApiClient(API_URL);
+
+// React Query hooks
+export const useStories = (params?: {
+  page?: number;
+  limit?: number;
+  status?: 'published' | 'draft' | 'all';
+}) => {
+  return useQuery({
+    queryKey: ['stories', params],
+    queryFn: () => apiClient.getStories(params),
+  });
+};
+
+export const useStoryBySlug = (slug: string) => {
+  return useQuery({
+    queryKey: ['story', slug],
+    queryFn: () => apiClient.getStoryBySlug(slug),
+    enabled: !!slug,
+  });
+};
+
+export const useStoryById = (id: string) => {
+  return useQuery({
+    queryKey: ['story', id],
+    queryFn: () => apiClient.getStoryById(id),
+    enabled: !!id,
+  });
+};
+
+export const useCreateStory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateStoryDto) => apiClient.createStory(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stories'] });
+    },
+  });
+};
+
+export const useUpdateStory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateStoryDto }) =>
+      apiClient.updateStory(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stories'] });
+      queryClient.invalidateQueries({ queryKey: ['story'] });
+    },
+  });
+};
+
+export const useDeleteStory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => apiClient.deleteStory(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stories'] });
+    },
+  });
+};
 

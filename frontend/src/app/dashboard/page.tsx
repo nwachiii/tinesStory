@@ -31,6 +31,7 @@ import { StatusBadge } from '@/components/common/StatusBadge';
 import { apiClient } from '@/lib/api';
 import { Story } from '@/types/story';
 import { formatDate } from '@/lib/dateUtils';
+import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -39,6 +40,8 @@ export default function DashboardPage() {
   const [filteredStories, setFilteredStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [storyToDelete, setStoryToDelete] = useState<Story | null>(null);
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -82,13 +85,16 @@ export default function DashboardPage() {
     router.push(`/stories/${story.slug}`);
   };
 
-  const handleDelete = async (story: Story) => {
-    if (!confirm(`Are you sure you want to delete "${story.title}"?`)) {
-      return;
-    }
+  const handleDelete = (story: Story) => {
+    setStoryToDelete(story);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!storyToDelete) return;
 
     try {
-      await apiClient.deleteStory(story._id);
+      await apiClient.deleteStory(storyToDelete._id);
       toast({
         title: 'Success',
         description: 'Story deleted successfully',
@@ -108,7 +114,15 @@ export default function DashboardPage() {
         duration: 5000,
         isClosable: true,
       });
+    } finally {
+      setIsDeleteDialogOpen(false);
+      setStoryToDelete(null);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteDialogOpen(false);
+    setStoryToDelete(null);
   };
 
   return (
@@ -227,6 +241,17 @@ export default function DashboardPage() {
           </Box>
         )}
       </Container>
+
+      <ConfirmDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        title="Delete Story"
+        message={`Are you sure you want to delete "${storyToDelete?.title}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        confirmColorScheme="red"
+      />
     </Box>
   );
 }

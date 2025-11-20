@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Container,
   Box,
@@ -15,49 +15,38 @@ import { Navbar } from '@/components/layout/Navbar';
 import { StoryList } from '@/components/stories/StoryList';
 import { Pagination } from '@/components/common/Pagination';
 import { StoryListSkeleton } from '@/components/common/skeletons';
-import { apiClient } from '@/lib/api';
-import { Story } from '@/types/story';
+import { useStories } from '@/lib/api';
 import { STORIES_PER_PAGE } from '@/constants/config';
 
 export default function HomePage() {
-  const [stories, setStories] = useState<Story[]>([]);
-  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [showDrafts, setShowDrafts] = useState(false);
   const toast = useToast();
 
-  const fetchStories = async (page: number, status: 'published' | 'draft' | 'all') => {
-    try {
-      setLoading(true);
-      const response = await apiClient.getStories({
-        page,
-        limit: STORIES_PER_PAGE,
-        status,
-      });
-      setStories(response.stories);
-      setTotalPages(response.totalPages);
-      setCurrentPage(response.currentPage);
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: error instanceof Error ? error.message : 'Failed to load stories',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data, isLoading, error } = useStories({
+    page: currentPage,
+    limit: STORIES_PER_PAGE,
+    status: showDrafts ? 'all' : 'published',
+  });
 
-  useEffect(() => {
-    fetchStories(1, showDrafts ? 'all' : 'published');
-  }, [showDrafts]);
+  if (error) {
+    toast({
+      title: 'Error',
+      description: error instanceof Error ? error.message : 'Failed to load stories',
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    });
+  }
 
   const handlePageChange = (page: number) => {
-    fetchStories(page, showDrafts ? 'all' : 'published');
+    setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleShowDraftsChange = (checked: boolean) => {
+    setShowDrafts(checked);
+    setCurrentPage(1); // Reset to first page when toggling drafts
   };
 
   return (
@@ -71,7 +60,7 @@ export default function HomePage() {
           </HStack>
           <Checkbox
             isChecked={showDrafts}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setShowDrafts(e.target.checked)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleShowDraftsChange(e.target.checked)}
           >
             <HStack spacing={1}>
               <Icon as={FiFileText} />
@@ -80,15 +69,15 @@ export default function HomePage() {
           </Checkbox>
         </HStack>
 
-        {loading ? (
+        {isLoading ? (
           <StoryListSkeleton />
         ) : (
           <>
-            <StoryList stories={stories} showStatus={showDrafts} />
-            {totalPages > 1 && (
+            <StoryList stories={data?.stories || []} showStatus={showDrafts} />
+            {data && data.totalPages > 1 && (
               <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
+                currentPage={data.currentPage}
+                totalPages={data.totalPages}
                 onPageChange={handlePageChange}
               />
             )}

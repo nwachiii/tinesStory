@@ -16,22 +16,149 @@ import {
   Icon,
   InputGroup,
   InputLeftElement,
+  Grid,
+  GridItem,
+  useColorModeValue,
 } from '@chakra-ui/react';
-import { 
-  FiType, 
-  FiUser, 
-  FiFileText, 
-  FiImage, 
-  FiEdit3, 
-  FiCheckCircle, 
-  FiX 
+import {
+  FiType,
+  FiUser,
+  FiFileText,
+  FiImage,
+  FiEdit3,
+  FiCheckCircle,
+  FiX
 } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
-import { Story, CreateStoryDto, UpdateStoryDto } from '@/types/story';
+import { Story, CreateStoryDto } from '@/types/story';
+
+// Common styles
+const inputGroupStyles = {
+  h: '40px',
+  rounded: 'xl',
+  alignItems: 'center',
+};
+
+const inputStyles = {
+  pl: 10,
+  size: 'md',
+  fontSize: '14px',
+  borderRadius: 'md',
+  sx: { '::placeholder': { fontSize: '12px' } },
+};
+
+const labelStyles = {
+  fontSize: '12px',
+  pb: "3px",
+};
+
+const errorTextStyles = {
+  color: 'red.500',
+  fontSize: 'sm',
+  mt: 1,
+};
+
+// Reusable FormInput component
+interface FormInputProps {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+  icon: React.ComponentType<any>;
+  maxLength?: number;
+  type?: string;
+  error?: string;
+  isRequired?: boolean;
+}
+
+function FormInput({
+  label,
+  value,
+  onChange,
+  placeholder,
+  icon,
+  maxLength,
+  type = 'text',
+  error,
+  isRequired = false,
+}: FormInputProps) {
+  return (
+    <FormControl isRequired={isRequired} isInvalid={!!error}>
+      <FormLabel {...labelStyles}>{label}</FormLabel>
+      <InputGroup {...inputGroupStyles}>
+        <InputLeftElement pointerEvents="none">
+          <Icon h={8} as={icon} color="gray.400" />
+        </InputLeftElement>
+        <Input
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          type={type}
+          {...inputStyles}
+        />
+      </InputGroup>
+      {error && <Text {...errorTextStyles}>{error}</Text>}
+    </FormControl>
+  );
+}
+
+// Reusable FormTextarea component
+interface FormTextareaProps {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder: string;
+  rows: number;
+  maxLength?: number;
+  fontFamily?: string;
+  error?: string;
+  isRequired?: boolean;
+  helperText?: string;
+}
+
+function FormTextarea({
+  label,
+  value,
+  onChange,
+  placeholder,
+  rows,
+  maxLength,
+  fontFamily,
+  error,
+  isRequired = false,
+  helperText,
+}: FormTextareaProps) {
+  return (
+    <FormControl isRequired={isRequired} isInvalid={!!error}>
+      <FormLabel {...labelStyles}>
+        {label}
+        {helperText && (
+          <Text as="span" color="gray.500" fontSize="sm">
+            {helperText}
+          </Text>
+        )}
+      </FormLabel>
+      <Textarea
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        rows={rows}
+        maxLength={maxLength}
+        fontFamily={fontFamily}
+        size="lg"
+        fontSize="14px"
+        borderRadius="md"
+        sx={{ '::placeholder': { fontSize: '12px' } }}
+      />
+      {error && <Text {...errorTextStyles}>{error}</Text>}
+    </FormControl>
+  );
+}
 
 interface StoryFormProps {
   story?: Story;
-  onSubmit: (data: CreateStoryDto | UpdateStoryDto) => Promise<void>;
+  onSubmit: (data: CreateStoryDto) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
 }
@@ -121,144 +248,117 @@ export function StoryForm({ story, onSubmit, onCancel, isLoading = false }: Stor
   const excerptLength = formData.excerpt.length;
 
   return (
-    <Box as="form" onSubmit={handleSubmit} maxW="4xl" mx="auto">
-      <Stack spacing={6}>
-        <FormControl isRequired isInvalid={!!errors.title}>
-          <FormLabel>
-            <HStack spacing={2}>
-              <Icon as={FiType} />
-              <span>Title</span>
-            </HStack>
-          </FormLabel>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <Icon as={FiType} color="gray.400" />
-            </InputLeftElement>
-            <Input
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              placeholder="Enter story title"
-              maxLength={200}
-              pl={10}
-            />
-          </InputGroup>
-          {errors.title && <Text color="red.500" fontSize="sm" mt={1}>{errors.title}</Text>}
-        </FormControl>
+    <Box
+      as="form"
+      onSubmit={handleSubmit}
+      p={6}
+    >
+      <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }} gap={6}>
+        <GridItem colSpan={{ base: 1, md: 2 }}>
+          <FormInput
+            label="Story Title"
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            placeholder="Enter story title"
+            icon={FiType}
+            maxLength={200}
+            error={errors.title}
+            isRequired
+          />
+        </GridItem>
 
-        <FormControl isRequired isInvalid={!!errors.authorName}>
-          <FormLabel>
-            <HStack spacing={2}>
-              <Icon as={FiUser} />
-              <span>Author Name</span>
-            </HStack>
-          </FormLabel>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <Icon as={FiUser} color="gray.400" />
-            </InputLeftElement>
-            <Input
-              value={formData.authorName}
-              onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
-              placeholder="Enter author name"
-              maxLength={100}
-              pl={10}
-            />
-          </InputGroup>
-          {errors.authorName && (
-            <Text color="red.500" fontSize="sm" mt={1}>{errors.authorName}</Text>
-          )}
-        </FormControl>
+        <GridItem>
+          <FormInput
+            label="Author Name"
+            value={formData.authorName}
+            onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
+            placeholder="Enter author name"
+            icon={FiUser}
+            maxLength={100}
+            error={errors.authorName}
+            isRequired
+          />
+        </GridItem>
 
-        <FormControl isRequired isInvalid={!!errors.excerpt}>
-          <FormLabel>
-            <HStack spacing={2}>
-              <Icon as={FiFileText} />
-              <span>Excerpt</span>
-              <Text as="span" color="gray.500" fontSize="sm">
-                ({excerptLength}/300)
-              </Text>
-            </HStack>
-          </FormLabel>
-          <Textarea
+        <GridItem>
+          <FormInput
+            label="Featured Image URL"
+            value={formData.featuredImage}
+            onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
+            placeholder="https://example.com/image.jpg"
+            icon={FiImage}
+            type="url"
+            error={errors.featuredImage}
+            isRequired
+          />
+        </GridItem>
+
+        <GridItem colSpan={{ base: 1, md: 2 }}>
+          <FormTextarea
+            label="Excerpt"
             value={formData.excerpt}
             onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
             placeholder="Enter a brief excerpt (10-300 characters)"
-            rows={3}
+            rows={4}
             maxLength={300}
+            error={errors.excerpt}
+            isRequired
+            helperText={` (${excerptLength}/300)`}
           />
-          {errors.excerpt && <Text color="red.500" fontSize="sm" mt={1}>{errors.excerpt}</Text>}
-        </FormControl>
+        </GridItem>
 
-        <FormControl isRequired isInvalid={!!errors.featuredImage}>
-          <FormLabel>
-            <HStack spacing={2}>
-              <Icon as={FiImage} />
-              <span>Featured Image URL</span>
-            </HStack>
-          </FormLabel>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <Icon as={FiImage} color="gray.400" />
-            </InputLeftElement>
-            <Input
-              value={formData.featuredImage}
-              onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
-              placeholder="https://example.com/image.jpg"
-              type="url"
-              pl={10}
+        <GridItem colSpan={{ base: 1, md: 2 }}>
+          <FormControl isRequired isInvalid={!!errors.content}>
+            <FormLabel fontSize={'12px'}>Content (Markdown)</FormLabel>
+            <Textarea
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              placeholder="Write your story content in Markdown format..."
+              rows={20}
+              fontFamily="mono"
+              size="lg"
+              fontSize={'14px'}
+              borderRadius="md"
+              sx={{ '::placeholder': { fontSize: '12px' } }}
             />
-          </InputGroup>
-          {errors.featuredImage && (
-            <Text color="red.500" fontSize="sm" mt={1}>{errors.featuredImage}</Text>
-          )}
-        </FormControl>
+            {errors.content && <Text color="red.500" fontSize="sm" mt={1}>{errors.content}</Text>}
+          </FormControl>
+        </GridItem>
 
-        <FormControl isRequired isInvalid={!!errors.content}>
-          <FormLabel>
-            <HStack spacing={2}>
-              <Icon as={FiEdit3} />
-              <span>Content (Markdown)</span>
-            </HStack>
-          </FormLabel>
-          <Textarea
-            value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            placeholder="Write your story content in Markdown format..."
-            rows={15}
-            fontFamily="mono"
-          />
-          {errors.content && <Text color="red.500" fontSize="sm" mt={1}>{errors.content}</Text>}
-        </FormControl>
+        <GridItem colSpan={{ base: 1, md: 2 }}>
+          <FormControl>
+            <FormLabel {...labelStyles}>Status</FormLabel>
+            <RadioGroup
+              value={formData.status}
+              onChange={(value) =>
+                setFormData({ ...formData, status: value as 'published' | 'draft' })
+              }
+            >
+              <Stack direction={{ base: 'column', sm: 'row' }} spacing={4}>
+                <Radio value="draft" size="sm">Draft</Radio>
+                <Radio value="published" size="sm">Published</Radio>
+              </Stack>
+            </RadioGroup>
+          </FormControl>
+        </GridItem>
 
-        <FormControl>
-          <FormLabel>Status</FormLabel>
-          <RadioGroup
-            value={formData.status}
-            onChange={(value) =>
-              setFormData({ ...formData, status: value as 'published' | 'draft' })
-            }
-          >
-            <Stack direction="row">
-              <Radio value="draft">Draft</Radio>
-              <Radio value="published">Published</Radio>
-            </Stack>
-          </RadioGroup>
-        </FormControl>
-
-        <HStack spacing={4} justify="flex-end">
-          <Button onClick={onCancel} isDisabled={isLoading} leftIcon={<FiX />}>
-            Cancel
-          </Button>
-          <Button 
-            type="submit" 
-            colorScheme="blue" 
-            isLoading={isLoading}
-            leftIcon={<FiCheckCircle />}
-          >
-            {story ? 'Update Story' : 'Create Story'}
-          </Button>
-        </HStack>
-      </Stack>
+        <GridItem colSpan={{ base: 1, md: 2 }}>
+          <HStack spacing={4} justify="flex-end" mt={6}>
+            <Button onClick={onCancel} isDisabled={isLoading} leftIcon={<FiX />} size="md" variant={'outline'} colorScheme='red'>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              colorScheme="blue"
+              isLoading={isLoading}
+              leftIcon={<FiCheckCircle />}
+              size="md"
+            >
+              {story ? 'Update Story' : 'Create Story'}
+            </Button>
+          </HStack>
+        </GridItem>
+      </Grid>
     </Box>
   );
 }
