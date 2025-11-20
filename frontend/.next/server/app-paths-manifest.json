@@ -1,0 +1,6 @@
+{
+  "/stories/[slug]/page": "app/stories/[slug]/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/stories/new/page": "app/stories/new/page.js",
+  "/page": "app/page.js"
+}
