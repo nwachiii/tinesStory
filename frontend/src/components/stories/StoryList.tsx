@@ -1,6 +1,7 @@
 'use client';
 
-import { SimpleGrid, Box, Text } from '@chakra-ui/react';
+import { SimpleGrid, Box, Text, Icon, VStack } from '@chakra-ui/react';
+import { FiBookOpen } from 'react-icons/fi';
 import { Story } from '@/types/story';
 import { StoryCard } from './StoryCard';
 
@@ -13,9 +14,12 @@ export function StoryList({ stories, showStatus = false }: StoryListProps) {
   if (stories.length === 0) {
     return (
       <Box textAlign="center" py={20}>
-        <Text fontSize="lg" color="gray.500">
-          No stories found
-        </Text>
+        <VStack spacing={4}>
+          <Icon as={FiBookOpen} boxSize={12} color="gray.400" />
+          <Text fontSize="lg" color="gray.500">
+            No stories found
+          </Text>
+        </VStack>
       </Box>
     );
   }

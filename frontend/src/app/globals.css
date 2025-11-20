@@ -49,18 +49,26 @@ body {
 }
 
 .markdown-content code {
-  background-color: #f4f4f4;
+  background-color: rgba(0, 0, 0, 0.1);
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-size: 0.9em;
 }
 
+[data-theme='dark'] .markdown-content code {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .markdown-content pre {
-  background-color: #f4f4f4;
+  background-color: rgba(0, 0, 0, 0.05);
   padding: 1em;
   border-radius: 5px;
   overflow-x: auto;
   margin-bottom: 1em;
+}
+
+[data-theme='dark'] .markdown-content pre {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .markdown-content pre code {
@@ -73,7 +81,8 @@ body {
   padding-left: 1em;
   margin: 1em 0;
   font-style: italic;
-  color: #4a5568;
+  color: inherit;
+  opacity: 0.8;
 }
 
 .markdown-content a {

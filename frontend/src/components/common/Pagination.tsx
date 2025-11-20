@@ -1,6 +1,7 @@
 'use client';
 
-import { HStack, Button, Text, Select } from '@chakra-ui/react';
+import { HStack, Button, Text, Icon } from '@chakra-ui/react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface PaginationProps {
   currentPage: number;
@@ -23,6 +24,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
         onClick={() => onPageChange(currentPage - 1)}
         isDisabled={currentPage === 1}
         size="sm"
+        leftIcon={<FiChevronLeft />}
       >
         Previous
       </Button>
@@ -60,6 +62,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
         onClick={() => onPageChange(currentPage + 1)}
         isDisabled={currentPage === totalPages}
         size="sm"
+        rightIcon={<FiChevronRight />}
       >
         Next
       </Button>

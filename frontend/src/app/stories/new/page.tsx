@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Box, Container, Heading, useToast } from '@chakra-ui/react';
+import { Box, Container, Heading, useToast, HStack, Icon } from '@chakra-ui/react';
+import { FiPlus } from 'react-icons/fi';
 import { Navbar } from '@/components/layout/Navbar';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { StoryForm } from '@/components/stories/StoryForm';
@@ -47,9 +48,12 @@ export default function CreateStoryPage() {
         ]}
       />
       <Container maxW="container.xl" py={8}>
-        <Heading size="lg" mb={6}>
-          Create New Story
-        </Heading>
+        <HStack spacing={2} mb={6}>
+          <Icon as={FiPlus} boxSize={6} />
+          <Heading size="lg">
+            Create New Story
+          </Heading>
+        </HStack>
         <StoryForm onSubmit={handleSubmit} onCancel={handleCancel} isLoading={isLoading} />
       </Container>
     </Box>

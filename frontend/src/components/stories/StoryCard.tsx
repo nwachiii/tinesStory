@@ -9,7 +9,10 @@ import {
   CardBody,
   CardFooter,
   Flex,
+  Icon,
+  HStack,
 } from '@chakra-ui/react';
+import { FiUser, FiCalendar } from 'react-icons/fi';
 import NextLink from 'next/link';
 import { Story } from '@/types/story';
 import { formatDate } from '@/lib/dateUtils';
@@ -65,14 +68,20 @@ export function StoryCard({ story, showStatus = false }: StoryCardProps) {
       <CardFooter>
         <Flex justify="space-between" align="center" width="100%">
           <Box>
-            <Text fontSize="sm" color="gray.500">
-              By {story.authorName}
-            </Text>
-            <Text fontSize="xs" color="gray.400">
-              {story.status === 'published' && story.publishedAt
-                ? formatDate(story.publishedAt)
-                : formatDate(story.createdAt)}
-            </Text>
+            <HStack spacing={1} mb={1}>
+              <Icon as={FiUser} fontSize="sm" color="gray.500" />
+              <Text fontSize="sm" color="gray.500">
+                {story.authorName}
+              </Text>
+            </HStack>
+            <HStack spacing={1}>
+              <Icon as={FiCalendar} fontSize="xs" color="gray.400" />
+              <Text fontSize="xs" color="gray.400">
+                {story.status === 'published' && story.publishedAt
+                  ? formatDate(story.publishedAt)
+                  : formatDate(story.createdAt)}
+              </Text>
+            </HStack>
           </Box>
         </Flex>
       </CardFooter>

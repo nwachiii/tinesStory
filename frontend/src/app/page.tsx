@@ -8,7 +8,9 @@ import {
   Checkbox,
   HStack,
   useToast,
+  Icon,
 } from '@chakra-ui/react';
+import { FiBookOpen, FiFileText } from 'react-icons/fi';
 import { Navbar } from '@/components/layout/Navbar';
 import { StoryList } from '@/components/stories/StoryList';
 import { Pagination } from '@/components/common/Pagination';
@@ -61,14 +63,20 @@ export default function HomePage() {
   return (
     <Box minH="100vh">
       <Navbar />
-      <Container maxW="container.xl" py={8}>
+      <Container maxW="container.lg" py={8}>
         <HStack justify="space-between" mb={6}>
-          <Heading size="lg">Stories</Heading>
+          <HStack spacing={2}>
+            <Icon as={FiBookOpen} boxSize={6} />
+            <Heading size="lg">Stories</Heading>
+          </HStack>
           <Checkbox
             isChecked={showDrafts}
             onChange={(e) => setShowDrafts(e.target.checked)}
           >
-            Show Drafts
+            <HStack spacing={1}>
+              <Icon as={FiFileText} />
+              <span>Show Drafts</span>
+            </HStack>
           </Checkbox>
         </HStack>
 

@@ -10,7 +10,9 @@ import {
   Button,
   HStack,
   Divider,
+  Icon,
 } from '@chakra-ui/react';
+import { FiUser, FiCalendar, FiEdit, FiTrash2, FiArrowLeft } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Story } from '@/types/story';
@@ -48,14 +50,20 @@ export function StoryDetail({
           {story.title}
         </Heading>
 
-        <Flex gap={4} mb={6} color="gray.600" fontSize="sm">
-          <Text>By {story.authorName}</Text>
+        <Flex gap={4} mb={6} color="gray.600" fontSize="sm" align="center">
+          <HStack spacing={1}>
+            <Icon as={FiUser} />
+            <Text>By {story.authorName}</Text>
+          </HStack>
           <Text>•</Text>
-          <Text>
-            {story.status === 'published' && story.publishedAt
-              ? formatDate(story.publishedAt)
-              : formatDate(story.createdAt)}
-          </Text>
+          <HStack spacing={1}>
+            <Icon as={FiCalendar} />
+            <Text>
+              {story.status === 'published' && story.publishedAt
+                ? formatDate(story.publishedAt)
+                : formatDate(story.createdAt)}
+            </Text>
+          </HStack>
         </Flex>
 
         <Divider mb={6} />
@@ -72,17 +80,17 @@ export function StoryDetail({
         {showActions && (
           <HStack spacing={4} mt={8}>
             {onEdit && (
-              <Button colorScheme="blue" onClick={onEdit}>
+              <Button colorScheme="blue" onClick={onEdit} leftIcon={<FiEdit />}>
                 Edit Story
               </Button>
             )}
             {onDelete && (
-              <Button colorScheme="red" onClick={onDelete}>
+              <Button colorScheme="red" onClick={onDelete} leftIcon={<FiTrash2 />}>
                 Delete Story
               </Button>
             )}
             <NextLink href="/" passHref legacyBehavior>
-              <Button as="a" variant="outline">
+              <Button as="a" variant="outline" leftIcon={<FiArrowLeft />}>
                 Back to Home
               </Button>
             </NextLink>

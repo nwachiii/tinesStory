@@ -1,6 +1,7 @@
 'use client';
 
-import { Badge } from '@chakra-ui/react';
+import { Badge, HStack, Icon } from '@chakra-ui/react';
+import { FiCheckCircle, FiFileText } from 'react-icons/fi';
 
 interface StatusBadgeProps {
   status: 'published' | 'draft';
@@ -14,7 +15,10 @@ export function StatusBadge({ status }: StatusBadgeProps) {
       py={1}
       borderRadius="md"
     >
-      {status === 'published' ? 'Published' : 'Draft'}
+      <HStack spacing={1}>
+        <Icon as={status === 'published' ? FiCheckCircle : FiFileText} boxSize={3} />
+        <span>{status === 'published' ? 'Published' : 'Draft'}</span>
+      </HStack>
     </Badge>
   );
 }

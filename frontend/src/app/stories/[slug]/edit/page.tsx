@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Box, Container, Heading, HStack, Button, useToast } from '@chakra-ui/react';
+import { Box, Container, Heading, HStack, Button, useToast, Icon } from '@chakra-ui/react';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 import { Navbar } from '@/components/layout/Navbar';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { StoryForm } from '@/components/stories/StoryForm';
@@ -128,12 +129,16 @@ export default function EditStoryPage() {
       />
       <Container maxW="container.xl" py={8}>
         <HStack justify="space-between" mb={6}>
-          <Heading size="lg">Edit Story</Heading>
+          <HStack spacing={2}>
+            <Icon as={FiEdit} boxSize={6} />
+            <Heading size="lg">Edit Story</Heading>
+          </HStack>
           <Button
             colorScheme="red"
             variant="outline"
             onClick={() => setDeleteDialogOpen(true)}
             isDisabled={isLoading || deleting}
+            leftIcon={<FiTrash2 />}
           >
             Delete Story
           </Button>

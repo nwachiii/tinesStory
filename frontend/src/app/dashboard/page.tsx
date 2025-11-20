@@ -19,8 +19,11 @@ import {
   InputLeftElement,
   useToast,
   Icon,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 import { IoSearchOutline } from "react-icons/io5";
+import { FiPlus, FiEye, FiEdit, FiTrash2, FiLayout } from 'react-icons/fi';
 import { Navbar } from '@/components/layout/Navbar';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
@@ -119,10 +122,14 @@ export default function DashboardPage() {
       />
       <Container maxW="container.xl" py={8}>
         <HStack justify="space-between" mb={6}>
-          <Heading size="lg">Dashboard</Heading>
+          <HStack spacing={2}>
+            <Icon as={FiLayout} boxSize={6} />
+            <Heading size="lg">Dashboard</Heading>
+          </HStack>
           <Button
             colorScheme="blue"
             onClick={() => router.push('/stories/new')}
+            leftIcon={<FiPlus />}
           >
             Create New Story
           </Button>
@@ -157,7 +164,10 @@ export default function DashboardPage() {
                 {filteredStories.length === 0 ? (
                   <Tr>
                     <Td colSpan={5} textAlign="center" py={8}>
-                      No stories found
+                      <VStack spacing={2}>
+                        <Icon as={FiLayout} boxSize={8} color="gray.400" />
+                        <Text color="gray.500">No stories found</Text>
+                      </VStack>
                     </Td>
                   </Tr>
                 ) : (
@@ -185,6 +195,7 @@ export default function DashboardPage() {
                             colorScheme="blue"
                             variant="outline"
                             onClick={() => handleView(story)}
+                            leftIcon={<FiEye />}
                           >
                             View
                           </Button>
@@ -193,6 +204,7 @@ export default function DashboardPage() {
                             colorScheme="green"
                             variant="outline"
                             onClick={() => handleEdit(story)}
+                            leftIcon={<FiEdit />}
                           >
                             Edit
                           </Button>
@@ -201,6 +213,7 @@ export default function DashboardPage() {
                             colorScheme="red"
                             variant="outline"
                             onClick={() => handleDelete(story)}
+                            leftIcon={<FiTrash2 />}
                           >
                             Delete
                           </Button>

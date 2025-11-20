@@ -13,7 +13,19 @@ import {
   HStack,
   Text,
   useToast,
+  Icon,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react';
+import { 
+  FiType, 
+  FiUser, 
+  FiFileText, 
+  FiImage, 
+  FiEdit3, 
+  FiCheckCircle, 
+  FiX 
+} from 'react-icons/fi';
 import { useState, useEffect } from 'react';
 import { Story, CreateStoryDto, UpdateStoryDto } from '@/types/story';
 
@@ -112,24 +124,46 @@ export function StoryForm({ story, onSubmit, onCancel, isLoading = false }: Stor
     <Box as="form" onSubmit={handleSubmit} maxW="4xl" mx="auto">
       <Stack spacing={6}>
         <FormControl isRequired isInvalid={!!errors.title}>
-          <FormLabel>Title</FormLabel>
-          <Input
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            placeholder="Enter story title"
-            maxLength={200}
-          />
+          <FormLabel>
+            <HStack spacing={2}>
+              <Icon as={FiType} />
+              <span>Title</span>
+            </HStack>
+          </FormLabel>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none">
+              <Icon as={FiType} color="gray.400" />
+            </InputLeftElement>
+            <Input
+              value={formData.title}
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              placeholder="Enter story title"
+              maxLength={200}
+              pl={10}
+            />
+          </InputGroup>
           {errors.title && <Text color="red.500" fontSize="sm" mt={1}>{errors.title}</Text>}
         </FormControl>
 
         <FormControl isRequired isInvalid={!!errors.authorName}>
-          <FormLabel>Author Name</FormLabel>
-          <Input
-            value={formData.authorName}
-            onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
-            placeholder="Enter author name"
-            maxLength={100}
-          />
+          <FormLabel>
+            <HStack spacing={2}>
+              <Icon as={FiUser} />
+              <span>Author Name</span>
+            </HStack>
+          </FormLabel>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none">
+              <Icon as={FiUser} color="gray.400" />
+            </InputLeftElement>
+            <Input
+              value={formData.authorName}
+              onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
+              placeholder="Enter author name"
+              maxLength={100}
+              pl={10}
+            />
+          </InputGroup>
           {errors.authorName && (
             <Text color="red.500" fontSize="sm" mt={1}>{errors.authorName}</Text>
           )}
@@ -137,10 +171,13 @@ export function StoryForm({ story, onSubmit, onCancel, isLoading = false }: Stor
 
         <FormControl isRequired isInvalid={!!errors.excerpt}>
           <FormLabel>
-            Excerpt
-            <Text as="span" color="gray.500" fontSize="sm" ml={2}>
-              ({excerptLength}/300)
-            </Text>
+            <HStack spacing={2}>
+              <Icon as={FiFileText} />
+              <span>Excerpt</span>
+              <Text as="span" color="gray.500" fontSize="sm">
+                ({excerptLength}/300)
+              </Text>
+            </HStack>
           </FormLabel>
           <Textarea
             value={formData.excerpt}
@@ -153,20 +190,36 @@ export function StoryForm({ story, onSubmit, onCancel, isLoading = false }: Stor
         </FormControl>
 
         <FormControl isRequired isInvalid={!!errors.featuredImage}>
-          <FormLabel>Featured Image URL</FormLabel>
-          <Input
-            value={formData.featuredImage}
-            onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
-            placeholder="https://example.com/image.jpg"
-            type="url"
-          />
+          <FormLabel>
+            <HStack spacing={2}>
+              <Icon as={FiImage} />
+              <span>Featured Image URL</span>
+            </HStack>
+          </FormLabel>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none">
+              <Icon as={FiImage} color="gray.400" />
+            </InputLeftElement>
+            <Input
+              value={formData.featuredImage}
+              onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
+              placeholder="https://example.com/image.jpg"
+              type="url"
+              pl={10}
+            />
+          </InputGroup>
           {errors.featuredImage && (
             <Text color="red.500" fontSize="sm" mt={1}>{errors.featuredImage}</Text>
           )}
         </FormControl>
 
         <FormControl isRequired isInvalid={!!errors.content}>
-          <FormLabel>Content (Markdown)</FormLabel>
+          <FormLabel>
+            <HStack spacing={2}>
+              <Icon as={FiEdit3} />
+              <span>Content (Markdown)</span>
+            </HStack>
+          </FormLabel>
           <Textarea
             value={formData.content}
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
@@ -193,10 +246,15 @@ export function StoryForm({ story, onSubmit, onCancel, isLoading = false }: Stor
         </FormControl>
 
         <HStack spacing={4} justify="flex-end">
-          <Button onClick={onCancel} isDisabled={isLoading}>
+          <Button onClick={onCancel} isDisabled={isLoading} leftIcon={<FiX />}>
             Cancel
           </Button>
-          <Button type="submit" colorScheme="blue" isLoading={isLoading}>
+          <Button 
+            type="submit" 
+            colorScheme="blue" 
+            isLoading={isLoading}
+            leftIcon={<FiCheckCircle />}
+          >
             {story ? 'Update Story' : 'Create Story'}
           </Button>
         </HStack>
